@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formularz przewoźnika</title>
+<style>
+  :root { --c:#1f4e79; --bg:#f4f6f9; --b:#d0d7e2; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:#1b1f24; }
+  header { background:var(--c); color:#fff; padding:16px; position:sticky; top:0; z-index:5; }
+  header h1 { margin:0; font-size:18px; }
+  form { max-width:720px; margin:0 auto; padding:12px 12px 90px; }
+  fieldset { background:#fff; border:1px solid var(--b); border-radius:12px; margin:12px 0; padding:12px 14px 14px; }
+  legend { font-weight:700; color:var(--c); padding:0 6px; }
+  label.f { display:block; margin-top:10px; font-size:14px; font-weight:600; }
+  input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], select, textarea {
+    width:100%; padding:12px; margin-top:4px; font-size:16px; border:1px solid var(--b); border-radius:8px; background:#fff; }
+  textarea { min-height:80px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  .chips label { display:flex; align-items:center; gap:6px; padding:8px 12px; border:1px solid var(--b);
+    border-radius:20px; font-size:14px; background:#fafbfc; }
+  .chips input { width:18px; height:18px; }
+  .hp { position:absolute; left:-9999px; }
+  .bar { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--b); padding:10px 12px; }
+  button { width:100%; max-width:720px; display:block; margin:0 auto; padding:14px; font-size:17px; font-weight:700;
+    color:#fff; background:var(--c); border:0; border-radius:10px; }
+  button:disabled { opacity:.6; }
+  #msg { max-width:720px; margin:10px auto; padding:12px; border-radius:8px; display:none; font-weight:600; }
+  #msg.ok { display:block; background:#e3f6e8; color:#14632b; }
+  #msg.err { display:block; background:#fde8e8; color:#9b1c1c; }
+  .req::after { content:" *"; color:#c00; }
+</style>
+</head>
+<body>
+<header><h1>🚛 Dane przewoźnika</h1></header>
+
+<form id="f" autocomplete="on">
+  <input class="hp" type="text" name="website_hp" tabindex="-1" autocomplete="off">
+
+  <fieldset>
+    <legend>Dane podstawowe</legend>
+    <label class="f req">Nazwa firmy<input type="text" name="company" required></label>
+    <div class="grid">
+      <label class="f">NIP / VAT UE<input type="text" name="nip"></label>
+      <label class="f">Kraj siedziby<input type="text" name="hq_country" placeholder="np. Polska"></label>
+    </div>
+    <label class="f">Adres<input type="text" name="address"></label>
+    <div class="grid">
+      <label class="f">Kod pocztowy<input type="text" name="zip"></label>
+      <label class="f">Miasto<input type="text" name="city"></label>
+    </div>
+    <label class="f">Strona WWW<input type="url" name="website" placeholder="https://"></label>
+    <div class="grid">
+      <label class="f req">E-mail ogólny<input type="email" name="email_general" required></label>
+      <label class="f">Telefon firmowy<input type="tel" name="phone_general"></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Osoba kontaktowa</legend>
+    <label class="f req">Imię i nazwisko<input type="text" name="contact_name" required></label>
+    <label class="f">Stanowisko<input type="text" name="contact_role" placeholder="np. spedytor, dyspozytor"></label>
+    <div class="grid">
+      <label class="f">Telefon<input type="tel" name="contact_phone"></label>
+      <label class="f">E-mail<input type="email" name="contact_email"></label>
+    </div>
+    <div class="f" style="font-weight:600;font-size:14px;margin-top:10px">Języki kontaktu</div>
+    <div class="chips" data-name="languages">
+      <label><input type="checkbox" value="PL"> PL</label>
+      <label><input type="checkbox" value="EN"> EN</label>
+      <label><input type="checkbox" value="DE"> DE</label>
+      <label><input type="checkbox" value="RU"> RU</label>
+      <label><input type="checkbox" value="UA"> UA</label>
+      <label><input type="checkbox" value="CZ"> CZ</label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Ładunki i sprzęt</legend>
+    <div class="f" style="font-weight:600;font-size:14px">Jakie ładunki przewozi</div>
+    <div class="chips" data-name="cargo_types">
+      <label><input type="checkbox" value="Drobnica / paletowe"> Paletowe</label>
+      <label><input type="checkbox" value="Masowe"> Masowe</label>
+      <label><input type="checkbox" value="Żywność / chłodnicze"> Chłodnicze</label>
+      <label><input type="checkbox" value="Ponadgabarytowe"> Ponadgabarytowe</label>
+      <label><input type="checkbox" value="Płyny / cysterny"> Płyny</label>
+      <label><input type="checkbox" value="Kontenery"> Kontenery</label>
+      <label><input type="checkbox" value="Samochody"> Samochody</label>
+      <label><input type="checkbox" value="Stal / metale"> Stal / metale</label>
+      <label><input type="checkbox" value="Budowlane"> Budowlane</label>
+      <label><input type="checkbox" value="Rolne"> Rolne</label>
+      <label><input type="checkbox" value="ADR"> ADR</label>
+    </div>
+
+    <div class="f" style="font-weight:600;font-size:14px;margin-top:14px">Rodzaj sprzętu</div>
+    <div class="chips" data-name="equipment">
+      <label><input type="checkbox" value="Plandeka"> Plandeka</label>
+      <label><input type="checkbox" value="Firanka"> Firanka</label>
+      <label><input type="checkbox" value="Mega"> Mega</label>
+      <label><input type="checkbox" value="Chłodnia"> Chłodnia</label>
+      <label><input type="checkbox" value="Izoterma"> Izoterma</label>
+      <label><input type="checkbox" value="Cysterna"> Cysterna</label>
+      <label><input type="checkbox" value="Wywrotka"> Wywrotka</label>
+      <label><input type="checkbox" value="Platforma"> Platforma</label>
+      <label><input type="checkbox" value="Niskopodwoziowa"> Niskopodwoziowa</label>
+      <label><input type="checkbox" value="Kontenerowa"> Kontenerowa</label>
+      <label><input type="checkbox" value="Bus do 3,5t"> Bus do 3,5 t</label>
+      <label><input type="checkbox" value="Laweta"> Laweta</label>
+    </div>
+    <div class="grid">
+      <label class="f">Liczba pojazdów<input type="number" name="fleet_size" min="0" inputmode="numeric"></label>
+      <label class="f">Typ przewozu
+        <select name="load_type">
+          <option value="">— wybierz —</option>
+          <option>FTL</option><option>LTL</option><option>FTL + LTL</option>
+        </select>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Kraje obsługi</legend>
+    <div class="chips" data-name="countries">
+      <label><input type="checkbox" value="PL"> PL</label><label><input type="checkbox" value="DE"> DE</label>
+      <label><input type="checkbox" value="CZ"> CZ</label><label><input type="checkbox" value="SK"> SK</label>
+      <label><input type="checkbox" value="HU"> HU</label><label><input type="checkbox" value="AT"> AT</label>
+      <label><input type="checkbox" value="FR"> FR</label><label><input type="checkbox" value="IT"> IT</label>
+      <label><input type="checkbox" value="ES"> ES</label><label><input type="checkbox" value="NL"> NL</label>
+      <label><input type="checkbox" value="BE"> BE</label><label><input type="checkbox" value="UK"> UK</label>
+      <label><input type="checkbox" value="DK"> DK</label><label><input type="checkbox" value="SE"> SE</label>
+      <label><input type="checkbox" value="NO"> NO</label><label><input type="checkbox" value="RO"> RO</label>
+      <label><input type="checkbox" value="BG"> BG</label><label><input type="checkbox" value="LT"> LT</label>
+      <label><input type="checkbox" value="LV"> LV</label><label><input type="checkbox" value="EE"> EE</label>
+      <label><input type="checkbox" value="UA"> UA</label><label><input type="checkbox" value="TR"> TR</label>
+      <label><input type="checkbox" value="Cała UE"> Cała UE</label>
+    </div>
+    <label class="f">Inne kraje<input type="text" name="countries_other" placeholder="np. Kazachstan, Maroko"></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Dokumenty i weryfikacja</legend>
+    <div class="grid">
+      <label class="f">ADR
+        <select name="adr"><option value="">—</option><option>Tak</option><option>Nie</option></select></label>
+      <label class="f">Licencja wspólnotowa
+        <select name="licence"><option value="">—</option><option>Tak</option><option>Nie</option></select></label>
+      <label class="f">OC przewoźnika (CMR)
+        <select name="insurance"><option value="">—</option><option>Tak</option><option>Nie</option></select></label>
+      <label class="f">GPS / monitoring
+        <select name="gps"><option value="">—</option><option>Tak</option><option>Nie</option></select></label>
+    </div>
+    <label class="f">Ocena wewnętrzna (1–5)
+      <select name="rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+    <label class="f">Uwagi<textarea name="notes"></textarea></label>
+    <label class="f">Wpisał(a)<input type="text" name="added_by" placeholder="Twoje imię"></label>
+  </fieldset>
+
+  <fieldset>
+    <label style="display:flex;gap:8px;align-items:flex-start;font-size:14px">
+      <input type="checkbox" name="gdpr" value="Tak" required style="width:20px;height:20px;margin-top:2px">
+      <span>Potwierdzam, że osoba kontaktowa wyraziła zgodę na przetwarzanie danych w celach współpracy transportowej (RODO).</span>
+    </label>
+  </fieldset>
+
+  <div id="msg"></div>
+  <div class="bar"><button id="btn" type="submit">Zapisz przewoźnika</button></div>
+</form>
+
+<script>
+  // >>> WKLEJ TUTAJ adres wdrożenia Apps Script (kończy się na /exec) <<<
+  const ENDPOINT = 'WKLEJ_URL_APPS_SCRIPT';
+
+  const form = document.getElementById('f');
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('btn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.className = ''; msg.style.display = 'none';
+    btn.disabled = true; btn.textContent = 'Zapisywanie…';
+
+    const data = new URLSearchParams();
+    new FormData(form).forEach((v, k) => data.append(k, v));
+
+    // pola z "chipsów" (wielokrotny wybór) -> jedna wartość po przecinku
+    document.querySelectorAll('.chips[data-name]').forEach(g => {
+      const vals = [...g.querySelectorAll('input:checked')].map(i => i.value);
+      if (g.dataset.name === 'countries') {
+        const other = form.countries_other.value.trim();
+        if (other) vals.push(other);
+      }
+      data.set(g.dataset.name, vals.join(', '));
+    });
+    data.delete('countries_other');
+
+    try {
+      await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: data });
+      msg.textContent = '✅ Zapisano w arkuszu.'; msg.className = 'ok';
+      const who = form.added_by.value;
+      form.reset(); form.added_by.value = who;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      msg.textContent = '❌ Nie udało się zapisać. Sprawdź internet i spróbuj ponownie.'; msg.className = 'err';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Zapisz przewoźnika';
+    }
+  });
+</script>
+</body>
+</html>
